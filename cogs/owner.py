@@ -65,7 +65,7 @@ class Owner(commands.Cog):
         embed = discord.Embed(title="Bot Uptime", description=str(datetime.datetime.now()-start),color=discord.Color.red())
         embed.add_field(name="Key", value="Hours:Minutes:Seconds.Microsecond")
         await ctx.send(embed=embed)
-        await self.bot.logout()
+        await self.bot.close()
 
 def setup(bot):
     bot.add_cog(Owner(bot))
