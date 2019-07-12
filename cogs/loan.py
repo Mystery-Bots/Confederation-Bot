@@ -1,5 +1,4 @@
 from discord.ext import commands
-from firebase_admin import db
 from config import *
 from .utils import perms
 import discord, json, asyncio
