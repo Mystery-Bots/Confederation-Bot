@@ -1,5 +1,6 @@
 from discord.ext import commands
 from .utils import perms
+from config import SPECIAL_MESSAGE
 import logging, discord, datetime
 
 logger = logging.getLogger('BOT CONSOLE')
@@ -54,6 +55,18 @@ class Owner(commands.Cog):
             await ctx.send("Loaded Cog\n"+"".join(cogs))
         else:
             await ctx.send("Loaded Cogs\n"+", ".join(cogs))
+
+    @perms.owner()
+    @commands.command(hidden=True)
+    async def message(self, ctx, *, message = None):
+        if message is None:
+            if SPECIAL_MESSAGE is "":
+                await self.bot.change_presence(activity=discord.Game(name="Confederation Bot | ;help"))
+            else:
+                await self.bot.change_presence(activity=discord.Game(name=f"{SPECIAL_MESSAGE} | ;help"))
+        else:
+            message = message+" | ;help"
+            await self.bot.change_presence(activity=discord.Game(name=message))
 
     @perms.owner()
     @commands.command(hidden=True)

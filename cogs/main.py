@@ -1,5 +1,7 @@
 from discord.ext import commands
-import datetime, discord
+import datetime, discord, logging
+
+logger = logging.getLogger('BOT CONSOLE')
 
 class Main(commands.Cog,name="General"):
     '''General Commands'''
@@ -10,6 +12,7 @@ class Main(commands.Cog,name="General"):
     async def ping(self, ctx):
         '''Checks bot latency'''
         await ctx.send(f"Bot ping is {round(self.bot.latency * 1000)}ms")
+        logger.info(f'Bot ping at {datetime.datetime.now().strftime("%B %d %Y - %I:%M%p")} was {round(self.bot.latency * 1000)}ms')
 
     @commands.command()
     async def uptime(self, ctx):

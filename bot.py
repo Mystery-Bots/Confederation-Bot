@@ -20,15 +20,16 @@ bot = commands.Bot(command_prefix=PREFIX, description="Bot for the Confederation
 @bot.event
 async def on_ready():
     if SPECIAL_MESSAGE is "":
-        await bot.change_presence(activity=discord.Game(name="Confederation Bot | ;help"))
+        await bot.change_presence(status=discord.Status.dnd,activity=discord.Game(name="Confederation Bot | ;help"))
     else:
-        await bot.change_presence(activity=discord.Game(name=f"{SPECIAL_MESSAGE} | ;help"))
+        await bot.change_presence(status=discord.Status.dnd, activity=discord.Game(name=f"{SPECIAL_MESSAGE} | ;help"))
     bot.uptime = datetime.datetime.now()
     logger.info(f'Ready: {bot.user} (ID: {bot.user.id}) (Time:{datetime.datetime.now().strftime("%d/%m/%Y, %I:%M:%S%p").lower()})')
     print(f'Ready: {bot.user} (ID: {bot.user.id}) (Time:{datetime.datetime.now().strftime("%d/%m/%Y, %I:%M:%S%p").lower()})')
 
 @bot.event
 async def on_resumed():
+    logger.info(f'Resumed... {datetime.datetime.now().strftime("%d/%m/%Y, %I:%M:%S%p").lower()}')
     print(f'Resumed... {datetime.datetime.now().strftime("%d/%m/%Y, %I:%M:%S%p").lower()}')
 
 @bot.event
@@ -68,6 +69,7 @@ if __name__ == '__main__':
                 bot.load_extension("cogs."+ extension)
             except Exception as e:
                 print(f'Failed to load extension {extension}.', file=sys.stderr)
+                logger.warning(f'Failed to load extension {extension}.', file=sys.stderr)
                 traceback.print_exc()
 
 try:
