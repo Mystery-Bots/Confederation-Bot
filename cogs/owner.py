@@ -10,7 +10,7 @@ class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(hidden=True)
     @perms.owner()
     async def load(self, ctx, *, cog: str):
         """Loads a cog."""
@@ -21,7 +21,7 @@ class Owner(commands.Cog):
         else:
             await ctx.send('**`SUCCESS`**')
 
-    @commands.command()
+    @commands.command(hidden=True)
     @perms.owner()
     async def unload(self, ctx, *, cog: str):
         """Unloads a cog."""
@@ -32,21 +32,30 @@ class Owner(commands.Cog):
         else:
             await ctx.send('**`SUCCESS`**')
 
-    @commands.command()
+    @commands.command(hidden=True)
     @perms.owner()
     async def reload(self, ctx, *, cog: str):
         """Reloads a cog."""
-        try:
-            self.bot.reload_extension("cogs."+cog)
-        except Exception as e:
-            await ctx.send('**`ERROR:`** {} - {}'.format(type(e).__name__,e))
+        if cog == "all":
+            for i in self.bot.cogs.keys():
+                try:
+                    self.bot.reload_extension("cogs."+cog)
+                except Exception as e:
+                    await ctx.send('**`ERROR:`** {} - {}'.format(type(e).__name__,e))
+                else:
+                    await ctx.send('**`SUCCESS`**')
         else:
-            await ctx.send('**`SUCCESS`**')
+            try:
+                self.bot.reload_extension("cogs."+cog)
+            except Exception as e:
+                await ctx.send('**`ERROR:`** {} - {}'.format(type(e).__name__,e))
+            else:
+                await ctx.send('**`SUCCESS`**')
 
-    @commands.command(aliases=["cogs"])
+    @commands.command(aliases=["cogs"], hidden=True)
     @perms.owner()
     async def coglist(self, ctx):
-        '''List of loaded cogs'''
+        """List of loaded cogs"""
         cogs = []
         for i in self.bot.cogs.keys():
             cogs.append(i)
@@ -58,7 +67,7 @@ class Owner(commands.Cog):
     @perms.owner()
     @commands.command(hidden=True)
     async def shutdown(self, ctx):
-        '''Shuts down the bot'''
+        """Shuts down the bot"""
         logger.info("Shutdown command run")
         print("Shutdown command run")
         start = self.bot.uptime

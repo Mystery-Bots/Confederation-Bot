@@ -19,11 +19,15 @@ class Bank(commands.Cog):
                    "__*Captain+ Commands*__\n"
                    "**;bank update**"
                    "**;bank reset**\n"
+                   "**;bank withdraw** (User) (Amount)"
                    "__*Officer+ Commands*__"
                    "**;bank add (Donor) (Amount)**\n"
                    "**;bank use (IGN) (Amount) (Reason)**\n"
-                    "__*Everyone*__\n"
-                    "**;bank donate (IGN) (Amount)**")
+                   "**;bank deposit confirm** (User) (Amount)"
+                   "__*Everyone*__\n"
+                   "**;bank donate (IGN) (Amount)**\n"
+                   "**;bank deposit**"
+                   "**;bank deposit request** (IGN) (Amount)")
 
     @perms.captain()
     @bank.command()
@@ -78,6 +82,23 @@ class Bank(commands.Cog):
         todo_channel = self.bot.get_channel(TODO_CHANNEL)
         await todo_channel.send(f"@everyone user {ctx.author.mention} has offered to donate {amount:,} gems to the clan. Their ign is `{ign}`")
         await ctx.send(f"Your donation offer of {amount:,} gems has been sent")
+
+    @bank.group()
+    async def deposit(self, ctx):
+        print("a")
+
+    @deposit.command()
+    async def request(self, ctx, ign: str, amount: int):
+        print("b")
+
+    @deposit.command()
+    async def confirm(self, ctx, user: discord.User, amount: int):
+        print("c")
+
+    @bank.command()
+    async def withdraw(self, ctx, user: discord.User, amount: int):
+        print("d")
+
 
 def setup(bot):
     bot.add_cog(Bank(bot))
