@@ -36,21 +36,12 @@ class Owner(commands.Cog):
     @perms.owner()
     async def reload(self, ctx, *, cog: str):
         """Reloads a cog."""
-        if cog == "all":
-            for i in self.bot.cogs.keys():
-                try:
-                    self.bot.reload_extension("cogs."+i)
-                except Exception as e:
-                    await ctx.send('**`ERROR:`** {} - {}'.format(type(e).__name__,e))
-                else:
-                    await ctx.send('**`SUCCESS`**')
+        try:
+            self.bot.reload_extension("cogs."+cog)
+        except Exception as e:
+            await ctx.send('**`ERROR:`** {} - {}'.format(type(e).__name__,e))
         else:
-            try:
-                self.bot.reload_extension("cogs."+cog)
-            except Exception as e:
-                await ctx.send('**`ERROR:`** {} - {}'.format(type(e).__name__,e))
-            else:
-                await ctx.send('**`SUCCESS`**')
+            await ctx.send('**`SUCCESS`**')
 
     @commands.command(aliases=["cogs"], hidden=True)
     @perms.owner()
