@@ -1,9 +1,10 @@
-import traceback, sys, discord, logging, datetime, asyncio
+import traceback, sys, discord, logging, datetime, asyncio, aiohttp
 from discord.ext import commands
 from cogs.utils import perms
 from config import *
 
-initial_extensions = ("lottery", "main", "owner", "loan", "bank", "testing")
+#initial_extensions = ("lottery", "main", "owner", "loan", "bank", "testing")
+initial_extensions = ("punishments", "owner")
 
 #LOGGING
 logger = logging.getLogger('BOT CONSOLE')
@@ -29,6 +30,7 @@ async def on_ready():
 
 @bot.event
 async def on_resumed():
+    bot.uptime = datetime.datetime.now()
     logger.info(f'Resumed... {datetime.datetime.now().strftime("%d/%m/%Y, %I:%M:%S%p").lower()}')
     print(f'Resumed... {datetime.datetime.now().strftime("%d/%m/%Y, %I:%M:%S%p").lower()}')
 
@@ -74,5 +76,5 @@ if __name__ == '__main__':
 
 try:
     bot.run(TOKEN, reconnect=True)
-except ConnectionError:
+except aiohttp.client_exceptions.ClientConnectorError:
     print("Could not connect to discord")

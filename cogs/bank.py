@@ -28,6 +28,7 @@ class Bank(commands.Cog):
                    "**;bank donate (IGN) (Amount)**\n"
                    "**;bank deposit**"
                    "**;bank deposit request** (IGN) (Amount)")
+        await ctx.send(message)
 
     @perms.captain()
     @bank.command()
@@ -83,21 +84,50 @@ class Bank(commands.Cog):
         await todo_channel.send(f"@everyone user {ctx.author.mention} has offered to donate {amount:,} gems to the clan. Their ign is `{ign}`")
         await ctx.send(f"Your donation offer of {amount:,} gems has been sent")
 
-    @bank.group()
+    @commands.group(invoke_without_command=True)
     async def deposit(self, ctx):
-        print("a")
+        message = ("__**Deposit Commands**__\n"
+                   "__*Captain+ Commands**__\n"
+                   "**;deposit withdraw** (User) (Amount)\n"
+                   "__*Officer+ Comamnds*__\n"
+                   "**;deposit confirm** (User) (Amount)\n"
+                   "__*Everyone Commands*__\n"
+                   "**;deposit request** (IGN) (Amount) (Deposit/Withdraw")
+        await ctx.send(message)
 
     @deposit.command()
     async def request(self, ctx, ign: str, amount: int):
-        print("b")
+        '''Request to deposit or withdraw gems'''
+        todo_channel = self.bot.get_channel(TODO_CHANNEL)
+        await todo_channel.send(f"@everyone user {ctx.author.mention} has offered to donate {amount:,} gems to the clan. Their ign is `{ign}`")
+        await ctx.send(f"Your donation offer of {amount:,} gems has been sent")
 
     @deposit.command()
     async def confirm(self, ctx, user: discord.User, amount: int):
-        print("c")
+        bank_channel = self.bot.get_channel(BANK_CHANNEL)
+        if user.name in bank["deposits"].keys():
+            bank["deposits"].update({user.name:bank["deposits"][user.name]+amount})
+        else:
+            bank["deposits"].update({user.name:amount})
+        bank["totals"]["deposits"] += amount
+        await bank_channel.send(f'**+{amount} gems** deposit from {user.mention} *(Will be paid back)*')
+        await ctx.send(f'Deposit of {amount} gems added for {user.name}')
+        with open("bank.json", "w") as file:
+            json.dump(bank, file)
 
     @bank.command()
     async def withdraw(self, ctx, user: discord.User, amount: int):
-        print("d")
+        bank_channel = self.bot.get_channel(BANK_CHANNEL)
+        if user.name in bank["deposits"].keys():
+            bank["deposits"].update({user.name:bank["deposits"][user.name]-amount})
+        else:
+            await ctx.send(f"User {user.mention} doesn't have a deposit")
+            return
+        bank["totals"]["deposits"] += amount
+        await bank_channel.send(f'**-{amount} gems** withdrawn from {user.mention} *(Will be paid back)*')
+        await ctx.send(f'Deposit of {bank["deposits"][user.name]} gems withdrawn for {user.name}')
+        with open("bank.json", "w") as file:
+            json.dump(bank, file)
 
 
 def setup(bot):
