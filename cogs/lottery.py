@@ -20,13 +20,13 @@ class Lottery(commands.Cog):
         message = ("__**Lottery Commands**__\n"
                    "__*Captain+ Commands*__\n"
                    "**;lottery end**\n"
-                   "**;lottery confirm (Discord) (Tickets Purchased)**\n"
-                   "**;lottery start (cost per ticket) (end date) (end time)**\n"
+                   "**;lottery confirm** (Discord) (Tickets Purchased)\n"
+                   "**;lottery start** (cost per ticket) (end date) (end time)\n"
                     "__*Everyone*__\n"
-                    "**;lottery buy (IGN) (# of tickets you want to buy)**")
+                    "**;lottery buy** (IGN) (# of tickets you want to buy)")
         await ctx.send(message)
 
-    @perms.captain()
+    @commands.has_any_role(perms.captain_role, perms.owner_role)
     @lottery.command()
     async def start(self, ctx, price: int, *,end: str):
         '''Start a lottery'''
@@ -39,7 +39,7 @@ class Lottery(commands.Cog):
         message = (f'**Lottery Started**\n@everyone\nStarted on {datetime.datetime.utcnow().strftime("%d/%m/%y")}. Will be ending on {end.strftime("%d/%m/%y")}. The tickets can be bought for {price:,} gems each.')
         await lottery_channel.send(message)
 
-    @perms.captain()
+    @commands.has_any_role(perms.captain_role, perms.owner_role)
     @lottery.command()
     async def confirm(self, ctx, user: discord.User, tickets: int):
         '''Confirm a user has brough a ticket'''
@@ -54,7 +54,7 @@ class Lottery(commands.Cog):
         await lottery_channel.send(f"{tickets} lottery tickets brought by {user.mention}")
         await ctx.send(f"{tickets} lottery tickets brought by {user.mention} for {tickets*price:,} gems")
 
-    @perms.captain()
+    @commands.has_any_role(perms.captain_role, perms.owner_role)
     @lottery.command()
     async def end(self, ctx):
         '''End the lottery'''

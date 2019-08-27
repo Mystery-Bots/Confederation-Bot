@@ -3,8 +3,8 @@ from discord.ext import commands
 from cogs.utils import perms
 from config import *
 
-#initial_extensions = ("lottery", "main", "owner", "loan", "bank", "testing")
-initial_extensions = ("punishments", "owner")
+initial_extensions = ("lottery", "main", "owner", "loan", "bank")
+#initial_extensions = ("punishments", "owner")
 
 #LOGGING
 logger = logging.getLogger('BOT CONSOLE')
@@ -43,6 +43,8 @@ async def on_disconnect():
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f"Missing required argument")
+    elif isinstance(error, commands.MissingRole):
+        await ctx.send(f"You are missing the role that is needed to run this command")
     elif isinstance(error, commands.NoPrivateMessage):
         await ctx.author.send('This command cannot be used in private messages.')
     elif isinstance(error, commands.DisabledCommand):
@@ -60,7 +62,9 @@ async def on_command_error(ctx, error):
 async def on_message(message):
     channel = message.channel
     if message.content.startswith(';') and message.author.id is not bot.user.id:
-        if message.author.id not in perms.staffs:
+        guild = bot.get_guild(506650935788044290)
+        role = guild.get_role(615666549222539336)
+        if role not in message.author.roles:
             await channel.send("I am not released yet. Please wait till I am released to try use me.", delete_after=5)
         else:
             await bot.process_commands(message)
