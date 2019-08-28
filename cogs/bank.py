@@ -111,9 +111,30 @@ class Bank(commands.Cog):
         with open("bank.json", "w") as file:
             json.dump(bank, file)
 
+
+    @deposit.command()
+    async def check(self, ctx, user: discord.User = None):
+        role = ctx.guild.get_role(perms.staff_role)
+        if role in ctx.author.roles:
+            if user is None:
+                if ctx.author.name in bank["deposits"]:
+                    await ctx.send(f"Your total amount deposited in the bank is `{bank['deposits'][ctx.author.name]} gems`")
+                else:
+                    await ctx.send(f"You currently don't have any deposits")
+            else:
+                if user.name in bank["deposits"]:
+                    await ctx.send(f"{user.name} has a total amount deposited in the bank of `{bank['deposits'][user.name]} gems`")
+                else:
+                    await ctx.send(f"{user.name} currently has no deposits")
+        else:
+            if ctx.author.name in bank["deposits"]:
+                await ctx.send(f"Your total amount deposited in the bank is `{bank['deposits'][ctx.author.name]} gems`")
+            else:
+                await ctx.send(f"You currently don't have any deposits")
+
     @commands.group(invoke_without_command=True)
     async def withdraw(self, ctx):
-        message = ("__**Deposit Commands**__\n"
+        message = ("__**Withdraw Commands**__\n"
                    "__*Captain+ Commands**__\n"
                    "**;withdraw confirm** (User) (Amount)\n"
                    "__*Everyone Commands*__\n"
