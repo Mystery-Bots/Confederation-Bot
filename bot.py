@@ -3,8 +3,8 @@ from discord.ext import commands
 from cogs.utils import perms
 from config import *
 
-initial_extensions = ("lottery", "main", "owner", "loan", "bank")
-#initial_extensions = ("punishments", "owner")
+#initial_extensions = ("lottery", "main", "owner", "loan", "bank")
+initial_extensions = ("moderation", "owner")
 
 #LOGGING
 logger = logging.getLogger('BOT CONSOLE')
