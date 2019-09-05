@@ -1,7 +1,7 @@
 # Confederation-Bot
 Bot for the Confederation of United Clashers. 
 
-Wiki which contains information on commands and other inmortant information can be found here  
+Wiki which contains information on commands and other important information can be found here  
 [Confederation Bot Wiki](../../wiki)
 
 # Disclaimer 
