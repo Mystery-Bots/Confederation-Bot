@@ -2,7 +2,7 @@
 name: Variability report
 about: Report a variability in the code
 title: "[Variability]"
-labels: ''
+labels: variability
 assignees: The-Mystery
 
 ---
