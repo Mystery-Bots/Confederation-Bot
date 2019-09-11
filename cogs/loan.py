@@ -38,7 +38,7 @@ class Loan(commands.Cog):
             await todo_channel.send(f"{ctx.author.mention} **, collect {payback:,} gems from {user.mention}.** They borrowed {loaned:,} gems from the Confederate Bank.")
             await bank_channel.send(f"**-{loaned:,} gems** Loaned to {user.mention}. Will pay back {payback:,} gems.")
             bank["totals"]["balance"] -= loaned
-            bank["totals"]["loans"] += loaned
+            bank["totals"]["loans"] += payback
             with open("bank.json", "w") as file:
                 json.dump(bank, file)
             await ctx.send(f"You have given {user.mention} a loan of {loaned:,} gems. They will pay back with {payback:,} gems.")
@@ -60,7 +60,7 @@ class Loan(commands.Cog):
         await bank_channel.send(f"**+{paidback:,} gems** Loan payment from {user.mention}")
         with open("bank.json", "w") as file:
             json.dump(bank, file)
-        await ctx.send(f"Loan payment from {user.mention} of {paidback:,} gems. Proccessed ")
+        await ctx.send(f"Loan payment from {user.mention} of {paidback:,} gems. Processed")
 
     @loan.command()
     async def request(self, ctx, ign: str, amount: int, payback: int):
@@ -74,7 +74,7 @@ class Loan(commands.Cog):
     async def update(self, ctx):
         '''Gets an update on number of gems loaned to users'''
         loan_amount = bank["totals"]["loans"]
-        await ctx.send(f"Total amount of gems given on loans is {loan_amount:,} gems")
+        await ctx.send(f"Total amount of gems waiting to be paid back from loans is {loan_amount:,} gems")
 
 def setup(bot):
     bot.add_cog(Loan(bot))

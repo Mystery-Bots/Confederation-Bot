@@ -106,8 +106,8 @@ class Bank(commands.Cog):
         else:
             bank["deposits"].update({user.name:amount})
         bank["totals"]["deposits"] += amount
-        await bank_channel.send(f'**+{amount} gems** deposit from {user.mention} *(Will be paid back)*')
-        await ctx.send(f'Deposit of {amount} gems added for {user.name}')
+        await bank_channel.send(f'**+{amount:,} gems** deposit from {user.mention} *(Will be paid back)*')
+        await ctx.send(f'Deposit of {amount:,} gems added for {user.name}')
         with open("bank.json", "w") as file:
             json.dump(bank, file)
 
@@ -130,8 +130,8 @@ class Bank(commands.Cog):
             await ctx.send(f"User {user.mention} doesn't have a deposit")
             return
         bank["totals"]["deposits"] += amount
-        await bank_channel.send(f'**-{amount} gems** withdrawn from {user.mention} *(Will be paid back)*')
-        await ctx.send(f'Deposit of {bank["deposits"][user.name]} gems withdrawn for {user.name}')
+        await bank_channel.send(f'**-{amount:,} gems** withdrawn from {user.mention} *(Will be paid back)*')
+        await ctx.send(f'{amount:,} gems withdrawn for {user.name}')
         with open("bank.json", "w") as file:
             json.dump(bank, file)
 
