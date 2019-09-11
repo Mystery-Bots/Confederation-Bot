@@ -58,16 +58,17 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.ArgumentParsingError):
         await ctx.send(error)
 
-@bot.event
-async def on_message(message):
-    channel = message.channel
-    if message.content.startswith(';') and message.author.id is not bot.user.id:
-        guild = bot.get_guild(506650935788044290)
-        role = guild.get_role(615666549222539336)
-        if role not in message.author.roles:
-            await channel.send("I am not released yet. Please wait till I am released to try use me.", delete_after=5)
-        else:
-            await bot.process_commands(message)
+@bot.command()
+async def bug(ctx):
+    '''Report a bug you found while using the bot'''
+    embed = discord.Embed(title="Found a Bug?", description="Report it here on Github", url="https://github.com/Mystery-Bots/Confederation-Bot/issues/new/choose")
+    await ctx.send(embed=embed)
+
+@bot.command()
+async def feature(ctx):
+    '''Request a feture that you want for the bot'''
+    embed = discord.Embed(title="Want a Feture added?", description="Make a request here on Github", url="https://github.com/Mystery-Bots/Confederation-Bot/issues/new/choose")
+    await ctx.send(embed=embed)
 
 if __name__ == '__main__':
         for extension in initial_extensions:
